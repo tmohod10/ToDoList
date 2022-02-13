@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Tooltip?>
+<BorderPane fx:id="mainBorderPane"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.tusharmohod.todolist.HelloController">
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="New Item" onAction="#showNewItemDialog"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="Close"/>
+                    </items>
+                </Menu>
+            </MenuBar>
+            <ToolBar>
+                <HBox spacing="5">
+                    <Button onAction="#showNewItemDialog">
+                        <tooltip>
+                            <Tooltip text="Add a New To Do Item"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView>
+                                <Image url="@icons/New24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button text="Save" onAction="#showNewItemDialog">
+                        <graphic>
+                            <ImageView>
+                                <Image url="@icons/Save24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button text="Edit" onAction="#showNewItemDialog">
+                        <graphic>
+                            <ImageView>
+                                <Image url="@icons/Edit24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button text="Delete" onAction="#showNewItemDialog">
+                        <graphic>
+                            <ImageView>
+                                <Image url="@icons/Delete24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </ToolBar>
+<!--            <GridPane hgap="10" >-->
+<!--                <padding>-->
+<!--                    <Insets top="5" bottom="5" left="5" right="5"/>-->
+<!--                </padding>-->
+<!--                <Button text="Add" GridPane.rowIndex="0" GridPane.columnIndex="0"-->
+<!--                    onMouseClicked="#showNewItemDialog"/>-->
+<!--                <Button text="Edit" GridPane.rowIndex="0" GridPane.columnIndex="1"/>-->
+<!--                <Button text="Save" GridPane.rowIndex="0" GridPane.columnIndex="2"/>-->
+<!--                <Button text="Delete" GridPane.rowIndex="0" GridPane.columnIndex="3"-->
+<!--                    onMouseClicked="#deleteByButton"/>-->
+<!--                <Button text="Revert" GridPane.rowIndex="0" GridPane.columnIndex="4"/>-->
+<!--                <Button text="Exit" GridPane.rowIndex="0" GridPane.columnIndex="5"/>-->
+<!--            </GridPane>-->
+        </VBox>
+    </top>
+    <left>
+        <ListView fx:id="toDoListView" onKeyPressed="#handleKeyPressed">
+        </ListView>
+    </left>
+    <center>
+        <VBox style="-fx-background-color: white;">
+            <TextArea fx:id="itemDetailsTextArea" VBox.vgrow="ALWAYS" wrapText="true"/>
+            <HBox style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="10" bottom="10" left="10" right="10"/>
+                </padding>
+                <Label text="Due: ">
+                    <font>
+                        <Font name="Times New Roman Bold" size="20"/>
+                    </font>
+                </Label>
+                <Label fx:id="deadlineLabel">
+                    <font>
+                        <Font name="Times New Roman Bold" size="20"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

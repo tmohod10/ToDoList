@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextArea?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.tusharmohod.todolist.DialogController">
+    <headerText>
+        We could put instrucitons here.
+    </headerText>
+    <content>
+        <GridPane hgap="10" vgap="10">
+            <Label text="Short Description:" GridPane.rowIndex="0" GridPane.columnIndex="0" prefWidth="100"/>
+            <TextField fx:id="shortDescriptionField" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Short title for your to do item"/>
+
+            <Label text="Details:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextArea fx:id="detailsArea" GridPane.rowIndex="1" GridPane.columnIndex="1" wrapText="true" promptText="Enter your detailed summary here..."/>
+
+            <Label  text="Date:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="deadlinePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="dd/mm/yyyy"/>
+        </GridPane>
+    </content>
+</DialogPane>

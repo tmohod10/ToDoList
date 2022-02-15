@@ -2,8 +2,11 @@ package com.tusharmohod.todolist;
 
 import com.tusharmohod.todolist.datamodel.ToDoData;
 import com.tusharmohod.todolist.datamodel.ToDoItem;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,8 +21,10 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class HelloController {
     private List<ToDoItem> toDoItems;
@@ -34,6 +39,12 @@ public class HelloController {
     private BorderPane mainBorderPane;
     @FXML
     private ContextMenu listContextMenu;
+    @FXML
+    private ToggleButton filterToggleButton;
+
+    private FilteredList<ToDoItem> filteredList;
+    private Predicate<ToDoItem> wantAllItems;
+    private Predicate<ToDoItem> wantTodaysItem;
 
     @FXML
     public void initialize() {
@@ -50,31 +61,6 @@ public class HelloController {
 
         listContextMenu.getItems().addAll(deleteMenuItem);
 
-//        ToDoItem item1 = new ToDoItem("Mail Birthday Card",
-//                "Buy a 30th birthday card for John",
-//                LocalDate.of(2022, Month.APRIL, 25));
-//        ToDoItem item2 = new ToDoItem("Doctor's appointment",
-//                "See Doctor Smith at 123 Main Street",
-//                LocalDate.of(2022, Month.MAY, 23));
-//        ToDoItem item3 = new ToDoItem("Finish design proposal for the client",
-//                "I promised Mike I'd email website mockups by Friday 22 April",
-//                LocalDate.of(2022, Month.APRIL, 22));
-//        ToDoItem item4 = new ToDoItem("Pickup Doud at the train station",
-//                "Doug arriving on Jan 15",
-//                LocalDate.of(2022, Month.JANUARY, 15));
-//        ToDoItem item5 = new ToDoItem("Pickup dry cleaning",
-//                "The clothes should be ready by wednesday",
-//                LocalDate.of(2022, Month.FEBRUARY, 16));
-//
-//        toDoItems = new ArrayList<>();
-//        toDoItems.add(item1);
-//        toDoItems.add(item2);
-//        toDoItems.add(item3);
-//        toDoItems.add(item4);
-//        toDoItems.add(item5);
-
-//        ToDoData.getInstance().setToDoItems(toDoItems);
-
         toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ToDoItem>() {
             @Override
             public void changed(ObservableValue<? extends ToDoItem> observableValue, ToDoItem oldValue, ToDoItem newValue) {
@@ -87,9 +73,32 @@ public class HelloController {
             }
         });
 
-//        toDoListView.getItems().setAll(ToDoData.getInstance().getToDoItems());
-        toDoListView.setItems(ToDoData.getInstance().getToDoItems());
-        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // allow to select only one list at a time
+        wantAllItems = new Predicate<ToDoItem>() {
+            @Override
+            public boolean test(ToDoItem toDoItem) {
+                return true;
+            }
+        };
+
+        wantTodaysItem = new Predicate<ToDoItem>() {
+            @Override
+            public boolean test(ToDoItem toDoItem) {
+                return toDoItem.getDeadLine().equals(LocalDate.now());
+            }
+        };
+
+        filteredList = new FilteredList<ToDoItem>(ToDoData.getInstance().getToDoItems(), wantAllItems);
+
+        SortedList<ToDoItem> sortedList = new SortedList<ToDoItem>(filteredList,
+                new Comparator<ToDoItem>() {
+                    @Override
+                    public int compare(ToDoItem item1, ToDoItem item2) {
+                        return item1.getDeadLine().compareTo(item2.getDeadLine());
+                    }
+                });
+
+        toDoListView.setItems(sortedList);
+        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
 
         toDoListView.setCellFactory(new Callback<ListView<ToDoItem>, ListCell<ToDoItem>>() {
@@ -188,5 +197,32 @@ public class HelloController {
         if(selectedItem != null) {
             deleteItem(selectedItem);
         }
+    }
+
+    @FXML
+    public void handleFilterButton() {
+        ToDoItem selectedItem = toDoListView.getSelectionModel().getSelectedItem();
+        if(filterToggleButton.isSelected()) {
+            filteredList.setPredicate(wantTodaysItem);
+            if(filteredList.isEmpty()) {
+                itemDetailsTextArea.clear();
+                deadlineLabel.setText("");
+            }
+            else if(filteredList.contains(selectedItem)) {
+                toDoListView.getSelectionModel().select(selectedItem);
+            }
+            else {
+                toDoListView.getSelectionModel().selectFirst();
+            }
+        }
+        else {
+            filteredList.setPredicate(wantAllItems);
+            toDoListView.getSelectionModel().select(selectedItem);
+        }
+    }
+
+    @FXML
+    public void handleExit() {
+        Platform.exit();
     }
 }

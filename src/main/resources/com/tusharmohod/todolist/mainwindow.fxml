@@ -18,6 +18,7 @@
 
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:id="mainBorderPane"
             xmlns:fx="http://javafx.com/fxml" fx:controller="com.tusharmohod.todolist.HelloController">
     <top>
@@ -27,7 +28,7 @@
                     <items>
                         <MenuItem text="New Item" onAction="#showNewItemDialog"/>
                         <SeparatorMenuItem/>
-                        <MenuItem text="Close"/>
+                        <MenuItem text="Exit" onAction="#handleExit"/>
                     </items>
                 </Menu>
             </MenuBar>
@@ -57,13 +58,23 @@
                             </ImageView>
                         </graphic>
                     </Button>
-                    <Button text="Delete" onAction="#showNewItemDialog">
+                    <Button text="Delete" onAction="#deleteByButton">
                         <graphic>
                             <ImageView>
                                 <Image url="@icons/Delete24.gif"/>
                             </ImageView>
                         </graphic>
                     </Button>
+                    <ToggleButton fx:id="filterToggleButton" text="Today's Item" onAction="#handleFilterButton">
+                        <tooltip>
+                            <Tooltip text="Toggle to show or hide today's item"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView>
+                                <Image url="@icons/Delete24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
                 </HBox>
             </ToolBar>
 <!--            <GridPane hgap="10" >-->
